@@ -1,0 +1,169 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><div class="container mx-auto p-4">
+  <h1 class="text-3xl font-bold mb-4">Resume Analysis Tool</h1>
+  <p class="text-gray-600 mb-6">Upload resumes and analyze them against a selected job description.</p>
+
+  <div class="grid grid-cols-4 gap-4">
+    <!-- Main Content -->
+    <div class="col-span-3">
+      <!-- Job Description Selection -->
+      <div class="mb-4">
+        <label for="jdSelect" class="block text-sm font-medium text-gray-700">Select Job Description</label>
+        <select id="jdSelect" [(ngModel)]="selectedJd" class="mt-1 block w-full p-2 border border-gray-300 rounded-md">
+          <option *ngFor="let jd of jobDescriptions" [value]="jd.key">{{ jd.title }}</option>
+        </select>
+      </div>
+
+      <!-- File Upload -->
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700">Upload Resumes</label>
+        <input type="file" multiple accept=".pdf,.doc,.docx" (change)="onFileSelect($event)" class="mt-1 block w-full p-2 border border-gray-300 rounded-md">
+        <p class="text-sm text-gray-500 mt-1">Supported formats: .pdf, .doc, .docx. Max size: {{ maxFileSizeMb }}MB</p>
+      </div>
+
+      <!-- Uploaded Files List -->
+      <div *ngIf="uploadedFiles.length > 0" class="mb-4">
+        <p class="text-sm font-medium">📂 Uploaded {{ uploadedFiles.length }} files:</p>
+        <ul class="list-disc pl-5">
+          <li *ngFor="let file of uploadedFiles.slice(0, displayFilesLimit)">{{ file.name }} ({{ (file.size / (1024 * 1024)).toFixed(2) }} MB)</li>
+          <li *ngIf="uploadedFiles.length > displayFilesLimit">and {{ uploadedFiles.length - displayFilesLimit }} more files</li>
+        </ul>
+        <button *ngIf="uploadedFiles.length > displayFilesLimit" (click)="toggleFileList()" class="text-blue-600 hover:underline">
+          {{ showAllFiles ? 'Show less' : 'Show all files' }}
+        </button>
+      </div>
+
+      <!-- Oversized Files Warning -->
+      <div *ngIf="oversizedFiles.length > 0" class="mb-4 p-4 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700">
+        <p>⚠️ The following files exceed the maximum size limit ({{ maxFileSizeMb }}MB): {{ oversizedFiles.join(', ') }}</p>
+      </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="col-span-1">
+      <!-- API Status -->
+      <div class="mb-4 p-4 bg-gray-100 rounded-md">
+        <p class="text-sm font-medium">API Connection Status</p>
+        <p *ngIf="apiStatus === null" class="text-gray-500">Checking...</p>
+        <p *ngIf="apiStatus === true" class="text-green-600">✅ Active</p>
+        <p *ngIf="apiStatus === false" class="text-red-600">⚠️ Not Available</p>
+        <button (click)="checkApiStatus()" class="mt-2 w-full bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700">Retry Connection</button>
+      </div>
+
+      <!-- Analyze Button -->
+      <button (click)="analyzeResumes()" [disabled]="!uploadedFiles.length || !apiStatus || processingStatus === 'running'" class="w-full bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700 disabled:bg-gray-400">
+        Analyze Resumes
+      </button>
+    </div>
+  </div>
+
+  <!-- Processing Status -->
+  <div *ngIf="processingStatus" class="my-4">
+    <div *ngIf="processingStatus === 'running'" class="p-4 bg-blue-100 border-l-4 border-blue-500 text-blue-700">
+      <p>Analyzing {{ filesToProcess }} resumes against '{{ selectedJd }}' job description... (Est. time: ~{{ estimatedTime }} seconds)</p>
+      <div class="w-full bg-gray-200 rounded-full h-2.5 mt-2">
+        <div class="bg-blue-600 h-2.5 rounded-full" [style.width]="progressPercentage + '%'"></div>
+      </div>
+    </div>
+    <div *ngIf="processingStatus === 'complete'" class="p-4 bg-green-100 border-l-4 border-green-500 text-green-700">
+      <p>✅ Analysis completed for {{ results.length }} resumes!</p>
+    </div>
+    <div *ngIf="processingStatus === 'failed'" class="p-4 bg-red-100 border-l-4 border-red-500 text-red-700">
+      <p>❌ Error during processing: {{ errorMessage }}</p>
+    </div>
+  </div>
+
+  <!-- Results Section -->
+  <div *ngIf="results.length > 0" class="my-4">
+    <h2 class="text-2xl font-bold mb-4">Analysis Results</h2>
+
+    <!-- Filters -->
+    <div class="grid grid-cols-2 gap-4 mb-4">
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Filter by Fitment Score</label>
+        <input type="range" [(ngModel)]="filterScore" [min]="minScore" [max]="maxScore" class="w-full">
+        <p class="text-sm text-gray-500">{{ filterScore }}</p>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Filter by Years of Experience</label>
+        <input type="range" [(ngModel)]="filterExperience" [min]="minExperience" [max]="maxExperience" class="w-full">
+        <p class="text-sm text-gray-500">{{ filterExperience }}</p>
+      </div>
+    </div>
+
+    <!-- Sort -->
+    <div class="mb-4">
+      <label class="block text-sm font-medium text-gray-700">Sort results by</label>
+      <select [(ngModel)]="sortColumn" (change)="sortResults()" class="mt-1 block w-full p-2 border border-gray-300 rounded-md">
+        <option value="Fitment Score">Fitment Score</option>
+        <option value="Years of Experience">Years of Experience</option>
+        <option value="Candidate Name">Candidate Name</option>
+        <option value="File Name">File Name</option>
+      </select>
+    </div>
+
+    <!-- Results Table -->
+    <div class="overflow-x-auto">
+      <table class="min-w-full bg-white border">
+        <thead>
+          <tr>
+            <th *ngFor="let column of columns" class="px-4 py-2 border">{{ column }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let result of filteredResults">
+            <td *ngFor="let column of columns" class="px-4 py-2 border">{{ result[column] }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="mt-2 text-sm text-gray-600">Showing {{ filteredResults.length }} of {{ results.length }} resumes</p>
+
+    <!-- Download Buttons -->
+    <div class="grid grid-cols-2 gap-4 mt-4">
+      <button (click)="downloadExcel()" class="bg-green-600 text-white p-2 rounded-md hover:bg-green-700">📊 Download as Excel</button>
+      <button (click)="downloadCsv()" class="bg-green-600 text-white p-2 rounded-md hover:bg-green-700">📄 Download as CSV</button>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <p class="mt-8 text-sm text-gray-500">Developed by Capgemini</p>
+</div>
