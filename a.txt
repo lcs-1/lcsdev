@@ -1,1 +1,47 @@
-Now you are a ppt master and you are having 20years expertise in making sdlc related slides so i will give conent make it as points to be inserted in slides So it has 4 columns process asis tobe benefits I have merged the columns to paste it here AI Tools for Test Case Code Generation Manual test case writing, more efforts and time Less scenarios and code coverage Use AI based tools for generation of test cases, to increase code coverage and quality with less efforts & time Improve code coverage, quality Reduce time and efforts required for test case writing Eg. DiffBlue Cover Code vulnerability Check No check for vulnerability Increases security risk Include Vulnerability check using different tools in CI/CD jobs Make Vulnerable free code mandatory for merge Reduce the vulnerabilities in application Eg. Coverity Code Formatter Developers are using different IDE, not having check for code format Use different tools and include code format check in CI/CD pipeline before merge Improve coding standard and code format Help developers to easy-to-read code Eg.Spotless include all enhancements you suggested and keep it short and impactful as i have more things to be pasted here So here are more points Code Coverage Less code coverage and it’s not mandatory Make code coverage mandatory with some percentage criteria for Merge request like 85%/90% Regular code coverage Improves code quality Reduces bug count Eg. JaCoCo Code Quality Check Manual code review and quality check takes more time and efforts Integrate different tools for code quality check, continuous inspection and automatic code review Continuos and Automatic code review Improves code quality Eg.SonarQube, SonarLint Performance Monitoring Manual performance testing takes more time Integrate tool for performance monitoring Continuously monitor performance and make improvements based on feedback, alerts Helps continuous monitoring ‘ Provides reports which helps to improve performance of application. Eg. Jmeter, Promentheus Involvement in Overview Priority given to Developer team in requirement overview calls, Low priority to Tester team Increases Communication Gap in understanding requirement Impact on test cases Make Tester team and Developer team mandatory in functionality overview call before and after development Reduces Communication gap and misunderstanding Improved in test case quality Reduces number of bugs Mandatory Acceptance Criteria User stories has requirement detail description Not having acceptance criteria Make Acceptance criteria Mandatory in User story. Story Owner must include acceptance criteria along with requirement Reduces communication gap Better understanding of requirement Helps Tester to understand the scope for testing Standardized Templates Variation in documents, templates increases complexity It increases efforts and time required for understanding for new team member Make standardized templates, prototypes for different processes involved in SDLC It will reduce efforts and time required for different SDLC processes Easy for new team member for understand the documents Centralized Resources Mostly design documents, templates are getting shared over a mail Difficult to find out after long time Make centralized repository for design document, templates and it must be shared with tester team along with developers Reduces communication gap Increases requirement understanding Reduces efforts required in development and testing. I want to present these in a single slide including previuos details i gave you so you can process this now and give me points as per SDLC high standards
+Here's a refined prompt to capture the comprehensive swimlane view for SDLC phases:
+ 
+Prompt: Create a detailed Swimlane View for Software Development Life Cycle (SDLC) with the following specifications:
+ 
+Swimlane Participants:
+1. Product Owner (PO)
+2. Systems Engineer (Functional Expert)
+3. Agile Team (Software Developer)
+4. Testing Team (Test Center of Excellence)
+5. DevOps Team
+6. Platform Team (Ontology Validation)
+ 
+SDLC Phases to Cover:
+1. Feature Definition
+2. Story Mapping
+3. Acceptance Criteria Definition
+4. Test-Driven Development (TDD)
+5. Testing Phase (Functional and Regression)
+6. CI/CD Pipeline
+7. Deployment
+ 
+Key Expectations:
+- Detailed breakdown of activities for each lane in every phase
+- TCoE improvement focus for each phase
+- Quality dashboard and KPI
+- Improvement metrics and recommended tools
+- Emphasis on:
+ * Quality assurance
+ * Continuous improvement
+ 
+Deliverable Format:
+- Comprehensive phase-wise breakdown
+- Clear delineation of responsibilities
+- Improvement strategies
+- Metrics and tool recommendations
+ 
+Focus Areas:
+- Shift-left testing
+- Automated testing
+- Continuous integration
+- Semantic consistency
+- Performance optimization
+ 
+Desired Outcome:
+A comprehensive, actionable swimlane view that demonstrates the end-to-end software development process with clear improvements and strategic insights.
+ 
+Would you like me to refine the prompt further or provide any additional context?
