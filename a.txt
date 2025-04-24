@@ -1,47 +1,73 @@
-Here's a refined prompt to capture the comprehensive swimlane view for SDLC phases:
- 
-Prompt: Create a detailed Swimlane View for Software Development Life Cycle (SDLC) with the following specifications:
- 
-Swimlane Participants:
-1. Product Owner (PO)
-2. Systems Engineer (Functional Expert)
-3. Agile Team (Software Developer)
-4. Testing Team (Test Center of Excellence)
-5. DevOps Team
-6. Platform Team (Ontology Validation)
- 
-SDLC Phases to Cover:
-1. Feature Definition
-2. Story Mapping
-3. Acceptance Criteria Definition
-4. Test-Driven Development (TDD)
-5. Testing Phase (Functional and Regression)
-6. CI/CD Pipeline
-7. Deployment
- 
-Key Expectations:
-- Detailed breakdown of activities for each lane in every phase
-- TCoE improvement focus for each phase
-- Quality dashboard and KPI
-- Improvement metrics and recommended tools
-- Emphasis on:
- * Quality assurance
- * Continuous improvement
- 
-Deliverable Format:
-- Comprehensive phase-wise breakdown
-- Clear delineation of responsibilities
-- Improvement strategies
-- Metrics and tool recommendations
- 
-Focus Areas:
-- Shift-left testing
-- Automated testing
-- Continuous integration
-- Semantic consistency
-- Performance optimization
- 
-Desired Outcome:
-A comprehensive, actionable swimlane view that demonstrates the end-to-end software development process with clear improvements and strategic insights.
- 
-Would you like me to refine the prompt further or provide any additional context?
+	Stakeholder	P.O/S.M	Architect	Dev Team	Test Team	Devops	Tools/Technology	Deliverables
+Product Vision	"Project Manager, Product Owner
+Scrum Master"	Requirement Gathering	Prepare Architecture runway					"Prioritised features
+Architecture runway
+Common Framework"
+PI Planning	"P.O/S.M
+Architect
+Developers
+Testing team"	"Prioritising Features
+Backlog Creation
+Prioritising sprint Backlogs
+Sprint Planning
+Story mapping"	"Validation of requirements
+High level Architecture
+Technical Approach and Integration strategy
+Risk assessment and feasibility analysis
+"	"Understand objectives and Deliverables,
+Provide Estimation
+Requirement analysis, design solutions
+"	"Understand Objectives/User Story
+Identify Test Requirements"		ADO	"PI Plan
+Product Backlog list
+Sprint Plan
+Sprint Backlogs
+Design Document
+Requirement document
+Acceptance Criteria
+
+
+"
+Development		"Daily Scrum
+Sprint Review"	"Code Review
+Functionality review
+Resolve technical issues
+Refine/update acceptance criteria"	"Code Development
+Code implementation
+Unit Testing
+Code reviews
+Demo
+"	Prepare Test Environment, Write Automation Test Cases		"Java,
+Angular,
+IDE(IntelliJ, VS Code,Eclipse),
+Github
+"	"Demo
+Test case approval
+"
+Testing		"Requirement Analysis:
+-Reviewing the software requirements document (SRD) and other related documents,
+-Identifying any missing or incomplete requirements"	"Test Planning:
+-Identifying the testing objectives and scope,"	"Test Case Development:
+-Identifying the test cases that will be developed,
+-Creating test data and test scenarios that will be used in the test cases"	"Different types of testing,Test Environment Setup
+"	"Test Execution:
+-Defect logging,
+-Test result analysis"	Selenium	"Test Closure :
+-Test summary report
+-Defect tracking report"
+Deployment		Approve Product Release	"Review Deployment plan
+"	Sync Master/Release repositories with deliverables	"Integration Testing
+"	"Configure Servers for deployment
+Deploy code in different environments
+Maintenance of test environment"	"AWS Teraform
+CI/CD"	Product Release
+Review	"P.O/S.M
+Architect
+Client
+
+Developed Product review
+UAT
+Feedback"							"Product review report
+Feedback report"
+								
+								
